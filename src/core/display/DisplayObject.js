@@ -278,6 +278,7 @@ DisplayObject.prototype.updateTransform = function ()
     // create some matrix refs for easy access
     var pt = this.parent.worldTransform;
     var wt = this.worldTransform;
+	var sc = this.texture && this.texture.scale ? 1 / this.texture.scale : 1;
 
     // temporary matrix variables
     var a, b, c, d, tx, ty;
@@ -294,10 +295,10 @@ DisplayObject.prototype.updateTransform = function ()
         }
 
         // get the matrix values of the displayobject based on its transform properties..
-        a  =  this._cr * this.scale.x;
-        b  =  this._sr * this.scale.x;
-        c  = -this._sr * this.scale.y;
-        d  =  this._cr * this.scale.y;
+        a  =  this._cr * this.scale.x * sc;
+        b  =  this._sr * this.scale.x * sc;
+        c  = -this._sr * this.scale.y * sc;
+        d  =  this._cr * this.scale.y * sc;
         tx =  this.position.x;
         ty =  this.position.y;
 
@@ -319,8 +320,8 @@ DisplayObject.prototype.updateTransform = function ()
     else
     {
         // lets do the fast version as we know there is no rotation..
-        a  = this.scale.x;
-        d  = this.scale.y;
+        a  = this.scale.x * sc;
+        d  = this.scale.y * sc;
 
         tx = this.position.x - this.pivot.x * a;
         ty = this.position.y - this.pivot.y * d;
